@@ -1,10 +1,8 @@
-require "jquery/plugin/circliful/rails/version"
-
 module Jquery
   module Plugin
     module Circliful
       module Rails
-        # Your code goes here...
+        class Engine < ::Rails::Engine
       end
     end
   end
