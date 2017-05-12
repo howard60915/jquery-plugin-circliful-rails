@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["howard60915@gmail.com"]
 
   spec.summary       = %q{Jquery plugin circliful for rails}
-  spec.homepage      = "https://github.com/pguso/jquery-plugin-circliful"
+  spec.homepage      = "https://github.com/howard60915/jquery-plugin-circliful-rails"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
