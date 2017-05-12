@@ -1,5 +1,5 @@
 # Jquery-Plugin-Circliful-Rails
-
+[![Gem Version](https://badge.fury.io/rb/jquery-plugin-circliful-rails.svg)](https://badge.fury.io/rb/jquery-plugin-circliful-rails)
 This gem  packages  [jquery-plugin-circliful](https://github.com/pguso/jquery-plugin-circliful) for Rails 3.0+ asset pipeline.
 
 Circliful is jquery plugin for info of Cirlce statistics based on SVG.
