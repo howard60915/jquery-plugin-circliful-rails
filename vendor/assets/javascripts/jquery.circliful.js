@@ -26,7 +26,7 @@
 			showPercent: 1,
 			percentageTextSize: 22,
 			percentageX: 100,
-			percentageY: 100,
+			percentageY: 113,
 			textAdditionalCss: '',
 			targetPercent: 0,
 			targetTextSize: 17,
@@ -46,7 +46,8 @@
 			decimals: 0,
 			alwaysDecimals: false,
 			title: 'Circle Chart',
-			description: ''
+			description: '',
+			progressColor: null
 		}, options);
 
 		return this.each(function () {
@@ -63,6 +64,7 @@
 			var elements;
 			var icon;
 			var backgroundBorderWidth = settings.backgroundBorderWidth;
+			var progressColor = settings.progressColor
 
 			if (settings.halfCircle) {
 				if (settings.iconPosition == 'left') {
@@ -104,21 +106,23 @@
 					iconX = 120;
 					iconY = 110;
 					percentageX = 80;
+				} else if (settings.iconPosition == 'top' && settings.icon != 'none') {
+					percentageY = 120;
 				}
 			}
 
-			if (settings.targetPercent > 0) {
+			if (settings.targetPercent > 0 && settings.halfCircle != true) {
 				percentageY = 95;
 				elements = '<g stroke="' + (settings.backgroundColor != 'none' ? settings.backgroundColor : '#ccc') + '" ><line x1="75" y1="101" x2="125" y2="101" stroke-width="1"  /></g>';
 				elements += '<text text-anchor="middle" x="' + percentageX + '" y="120" style="font-size: ' + settings.targetTextSize + 'px;" fill="' + settings.targetColor + '">' + settings.targetPercent + (settings.noPercentageSign && settings.replacePercentageByText == null ? '' : '%') + '</text>';
 				elements += '<circle cx="100" cy="100" r="69" fill="none" stroke="' + settings.backgroundColor + '" stroke-width="3" stroke-dasharray="450" transform="rotate(-90,100,100)" />';
-				elements += '<circle cx="100" cy="100" r="69" fill="none" stroke="' + settings.targetColor + '" stroke-width="3" stroke-dasharray="' + (360 / 100 * settings.targetPercent) + ', 20000" transform="rotate(-90,100,100)" />';
+				elements += '<circle cx="100" cy="100" r="69" fill="none" stroke="' + settings.targetColor + '" stroke-width="3" stroke-dasharray="' + (435 / 100 * settings.targetPercent) + ', 20000" transform="rotate(-90,100,100)" />';
 			}
 
 			if (settings.text != null) {
 				if (settings.halfCircle) {
 					if (settings.textBelow) {
-						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100') + '" y="' + (settings.textY != null ? settings.textY : '120') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
+						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100') + '" y="' + (settings.textY != null ? settings.textY : '64%') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
 					}
 					else if (settings.multiPercentage == 0) {
 						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100' ) + '" y="' + (settings.textY != null ? settings.textY : '115') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
@@ -128,7 +132,7 @@
 					}
 				} else {
 					if (settings.textBelow) {
-						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100' ) + '" y="' + (settings.textY != null ? settings.textY : '190') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
+						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100' ) + '" y="' + (settings.textY != null ? settings.textY : '99%') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
 					}
 					else if (settings.multiPercentage == 0) {
 						elements += '<text text-anchor="middle" x="' + (settings.textX != null ? settings.textX : '100' ) + '" y="' + (settings.textY != null ? settings.textY : '115') + '" style="' + settings.textStyle + '" fill="' + settings.textColor + '">' + settings.text + '</text>';
@@ -233,9 +237,14 @@
 						angle += angleIncrement;
 						summary += oneStep;
 					}
-
-					if (angle / 3.6 >= percent && last == 1) {
-						angle = 3.6 * percent;
+					if (settings.halfCircle) {
+						if (angle *  2 / 3.6 >= percent && last == 1) {
+							angle = (3.6 * percent) / 2
+						}
+					}	else {
+						if (angle / 3.6 >= percent && last == 1) {
+							angle = 3.6 * percent;
+						}
 					}
 
 					if (summary > settings.target && last == 1) {
@@ -268,6 +277,20 @@
 						myTimer
 							.find('.percent')
 							.text('');
+					}
+
+					if (progressColor != null) {
+						$.each(progressColor, function(key, color){
+							if (settings.halfCircle) {
+								key /=  2
+							}
+							if ( angle >= key * 3.6) {
+								circle.css({
+									stroke: color,
+									transition: 'stroke 0.1s linear'
+								});
+							}
+						});
 					}
 				}.bind(circle), interval);
 			}
